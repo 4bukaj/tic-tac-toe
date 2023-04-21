@@ -6,10 +6,13 @@ const startGameScreen = document.querySelector(".game-start");
 const gameScreen = document.querySelector(".game");
 const gameBoard = document.querySelector(".game-board");
 const gameCells = Array.from(
-  document.getElementsByClassName("game-board__cell")
+  gameBoard.getElementsByClassName("game-board__cell")
 );
 const endGameScreen = document.querySelector(".game-end");
 const previousGamesScreen = document.querySelector(".previous-games");
+const previousGamesContainer = previousGamesScreen.querySelector(
+  ".previous-games__container"
+);
 let circleMove = true;
 
 const players = {
@@ -138,11 +141,11 @@ function saveGameCombination() {
     } else if (cell.classList.contains(players.cross.sign)) {
       lastCombination.push(players.cross.sign);
     } else {
-      lastCombination.push("");
+      lastCombination.push("emptyCell");
     }
   });
 
-  pastGamesCombinations.push(lastCombination);
+  pastGamesCombinations.unshift(lastCombination);
 }
 
 function showPreviousGames() {
@@ -150,5 +153,33 @@ function showPreviousGames() {
   gameScreen.classList.add("hidden");
   previousGamesScreen.classList.remove("hidden");
 
-  console.log(pastGamesCombinations);
+  generatePreviousBoards(pastGamesCombinations.length);
+}
+
+function generatePreviousBoards(games) {
+  //clearing previous games container before inserting history
+  previousGamesContainer.innerHTML = "";
+
+  for (let i = 0; i < games; i++) {
+    //creating container for single old game
+    const oldGameContainer = document.createElement("div");
+    oldGameContainer.classList.add("old-game");
+
+    //creating board for old game
+    const oldGameBoard = document.createElement("div");
+    oldGameBoard.classList.add("game-board");
+
+    for (let j = 0; j < 9; j++) {
+      const oldGameCell = document.createElement("div");
+      oldGameCell.classList.add("game-board__cell");
+      const sign = pastGamesCombinations[i][j];
+      oldGameCell.classList.add(sign);
+      if (sign === "circle") oldGameCell.classList.add(players.circle.color);
+      else if (sign === "cross") oldGameCell.classList.add(players.cross.color);
+      oldGameBoard.appendChild(oldGameCell);
+    }
+    //apending divs to each other
+    oldGameContainer.appendChild(oldGameBoard);
+    previousGamesContainer.appendChild(oldGameContainer);
+  }
 }
