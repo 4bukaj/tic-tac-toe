@@ -2,7 +2,9 @@ const startGameBtn = document.getElementById("startGame-btn");
 const startGameScreen = document.querySelector(".game-start");
 const gameScreen = document.querySelector(".game");
 const gameBoard = document.querySelector(".game-board");
-const gameCells = document.getElementsByClassName("game-board__cell");
+const gameCells = Array.from(
+  document.getElementsByClassName("game-board__cell")
+);
 let circleMove = true;
 
 const winningCombinations = [
@@ -18,7 +20,7 @@ const winningCombinations = [
 
 startGameBtn.addEventListener("click", startGame);
 
-Array.from(gameCells).map((cell) =>
+gameCells.map((cell) =>
   cell.addEventListener("click", handleClick, { once: true })
 );
 
@@ -32,21 +34,17 @@ function startGame() {
   gameBoard.classList.add(currentPlayer());
 }
 
-startGame();
-
 function handleClick(e) {
   const clickedCell = e.target;
-  const currentPlayer = currentPlayer();
-  clickedCell.classList.add(currentPlayer);
+  clickedCell.classList.add(currentPlayer());
   clickedCell.classList.remove("clickable");
+  if (checkWin(currentPlayer())) {
+    endGame(currentPlayer());
+  } else if (checkDraw()) endGame("draw");
   switchPlayer();
-  currentPlayer === "circle"
+  currentPlayer() === "circle"
     ? gameBoard.classList.replace("cross", "circle")
     : gameBoard.classList.replace("circle", "cross");
-
-  if (checkWin(currentPlayer)) {
-    alert("wygrales");
-  }
 }
 
 function switchPlayer() {
@@ -54,4 +52,23 @@ function switchPlayer() {
   gameBoard.classList.toggle("text--dark-purple");
 }
 
-function checkWin(currentPlayer) {}
+function checkWin(currentPlayer) {
+  return winningCombinations.some((combination) => {
+    return combination.every((index) => {
+      return gameCells[index].classList.contains(currentPlayer);
+    });
+  });
+}
+
+function checkDraw() {
+  return gameCells.every((cell) => {
+    return (
+      cell.classList.contains("circle") || cell.classList.contains("cross")
+    );
+  });
+}
+
+function endGame(result) {
+  if (result === "draw") console.log("its a draw");
+  else console.log(result + " win");
+}
