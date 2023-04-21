@@ -83,10 +83,16 @@ body {
   justify-content: space-between;
 }
 
-.game-start__text {
+.game-start__players {
   color: var(--yellow);
   font-size: 14rem;
   text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+.game-start__players > span {
+  cursor: pointer;
+  border: 3px solid blue;
 }
 
 .game {
@@ -138,4 +144,26 @@ body {
 .game-board.cross .game-board__cell:not(.cross):not(.circle):hover::before,
 .game-board.circle .game-board__cell:not(.cross):not(.circle):hover::before {
   opacity: 0.4;
+}
+
+.game-end {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.game-end__text {
+  color: var(--yellow);
+  font-size: 10rem;
+  text-align: center;
+}
+
+.game-end__buttons {
+  display: flex;
+  gap: 40px;
 }

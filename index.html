@@ -17,12 +17,15 @@
   <body>
     <div class="container">
       <div class="game-start">
-        <div class="game-start__text">X O</div>
+        <div class="game-start__players">
+          <span>X</span>
+          <span>O</span>
+        </div>
         <div class="game-start__button">
-          <button class="btn--yellow" id="startGame-btn">Start</button>
+          <button class="btn--yellow startGame-btn">Start</button>
         </div>
       </div>
-      <div class="game">
+      <div class="game hidden">
         <div class="game-board">
           <div class="game-board__cell clickable"></div>
           <div class="game-board__cell clickable"></div>
@@ -35,7 +38,13 @@
           <div class="game-board__cell clickable"></div>
         </div>
       </div>
-      <div class="game-end"></div>
+    </div>
+    <div class="game-end hidden">
+      <div class="game-end__text">X's win!</div>
+      <div class="game-end__buttons">
+        <button class="btn--yellow startGame-btn">Play again</button>
+        <button class="btn--yellow">Previous games</button>
+      </div>
     </div>
 
     <script src="script.js"></script>

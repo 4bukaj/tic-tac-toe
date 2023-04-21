@@ -1,10 +1,13 @@
-const startGameBtn = document.getElementById("startGame-btn");
+const startGameBtn = Array.from(
+  document.getElementsByClassName("startGame-btn")
+);
 const startGameScreen = document.querySelector(".game-start");
 const gameScreen = document.querySelector(".game");
 const gameBoard = document.querySelector(".game-board");
 const gameCells = Array.from(
   document.getElementsByClassName("game-board__cell")
 );
+const endGameScreen = document.querySelector(".game-end");
 let circleMove = true;
 
 const winningCombinations = [
@@ -18,19 +21,22 @@ const winningCombinations = [
   [2, 4, 6],
 ];
 
-startGameBtn.addEventListener("click", startGame);
-
-gameCells.map((cell) =>
-  cell.addEventListener("click", handleClick, { once: true })
-);
+startGameBtn.forEach((button) => button.addEventListener("click", startGame));
 
 function currentPlayer() {
   return circleMove ? "circle" : "cross";
 }
 
 function startGame() {
-  startGameScreen.classList.add("hidden");
-  gameScreen.classList.remove("hidden");
+  endGameScreen.classList.add("hidden");
+  gameCells.forEach((cell) => {
+    cell.classList.add("clickable");
+    cell.classList.remove("cross");
+    cell.classList.remove("circle");
+    cell.addEventListener("click", handleClick, { once: true });
+  });
+  startGameScreen.classList.toggle("hidden");
+  gameScreen.classList.toggle("hidden");
   gameBoard.classList.add(currentPlayer());
 }
 
@@ -69,6 +75,20 @@ function checkDraw() {
 }
 
 function endGame(result) {
-  if (result === "draw") console.log("its a draw");
-  else console.log(result + " win");
+  let winMessage;
+
+  switch (result) {
+    case "draw":
+      winMessage = "It's a draw!";
+      break;
+    case "circle":
+      winMessage = "O's win!";
+      break;
+    case "cross":
+      winMessage = "X's win!";
+      break;
+  }
+
+  endGameScreen.querySelector(".game-end__text").innerHTML = winMessage;
+  endGameScreen.classList.remove("hidden");
 }
