@@ -13,6 +13,7 @@ const previousGamesScreen = document.querySelector(".previous-games");
 const previousGamesContainer = previousGamesScreen.querySelector(
   ".previous-games__container"
 );
+const gamesScore = document.querySelector(".previous-games__score");
 let circleMove = true;
 
 const players = {
@@ -38,6 +39,11 @@ const winningCombinations = [
 ];
 
 const pastGamesCombinations = [];
+const score = {
+  circle: 0,
+  cross: 0,
+  draws: 0,
+};
 
 startGameBtn.forEach((button) => button.addEventListener("click", startGame));
 previousGamesBtn.addEventListener("click", showPreviousGames);
@@ -117,12 +123,15 @@ function endGame(result) {
   switch (result) {
     case "draw":
       winMessage = "It's a draw!";
+      score.draws++;
       break;
     case players.circle.sign:
       winMessage = "O's win!";
+      score.circle++;
       break;
     case players.cross.sign:
       winMessage = "X's win!";
+      score.cross++;
       break;
   }
 
@@ -159,6 +168,11 @@ function showPreviousGames() {
 function generatePreviousBoards(games) {
   //clearing previous games container before inserting history
   previousGamesContainer.innerHTML = "";
+
+  //displaying score
+  gamesScore.querySelector(".score-x .score").innerHTML = score.cross;
+  gamesScore.querySelector(".score-o .score").innerHTML = score.circle;
+  gamesScore.querySelector(".score-draw .score").innerHTML = score.draws;
 
   for (let i = 0; i < games; i++) {
     //creating container for single old game
