@@ -10,6 +10,17 @@ const gameCells = Array.from(
 const endGameScreen = document.querySelector(".game-end");
 let circleMove = true;
 
+const players = {
+  circle: {
+    sign: "circle",
+    color: "text--yellow",
+  },
+  cross: {
+    sign: "cross",
+    color: "text--dark-purple",
+  },
+};
+
 const winningCombinations = [
   [0, 1, 2],
   [3, 4, 5],
@@ -24,17 +35,25 @@ const winningCombinations = [
 startGameBtn.forEach((button) => button.addEventListener("click", startGame));
 
 function currentPlayer() {
-  return circleMove ? "circle" : "cross";
+  return circleMove ? players.circle.sign : players.cross.sign;
+}
+
+function currentColor() {
+  return circleMove ? players.circle.color : players.cross.color;
+}
+
+function previousColor() {
+  return circleMove ? players.cross.color : players.circle.color;
 }
 
 function startGame() {
   endGameScreen.classList.add("hidden");
+  //resetting board
   gameCells.forEach((cell) => {
-    cell.classList.add("clickable");
-    cell.classList.remove("cross");
-    cell.classList.remove("circle");
+    cell.className = "game-board__cell clickable";
     cell.addEventListener("click", handleClick, { once: true });
   });
+  gameBoard.classList.add(currentColor());
   startGameScreen.classList.toggle("hidden");
   gameScreen.classList.toggle("hidden");
   gameBoard.classList.add(currentPlayer());
@@ -44,18 +63,23 @@ function handleClick(e) {
   const clickedCell = e.target;
   clickedCell.classList.add(currentPlayer());
   clickedCell.classList.remove("clickable");
+  clickedCell.classList.add(currentColor());
+  gameBoard.className = "game-board " + currentPlayer() + " " + previousColor();
+
+  //checking for winning combination
   if (checkWin(currentPlayer())) {
     endGame(currentPlayer());
   } else if (checkDraw()) endGame("draw");
   switchPlayer();
-  currentPlayer() === "circle"
-    ? gameBoard.classList.replace("cross", "circle")
-    : gameBoard.classList.replace("circle", "cross");
+
+  //replacing class for players hovers
+  currentPlayer() === players.circle.sign
+    ? gameBoard.classList.replace(players.cross.sign, players.circle.sign)
+    : gameBoard.classList.replace(players.circle.sign, players.cross.sign);
 }
 
 function switchPlayer() {
   circleMove = !circleMove;
-  gameBoard.classList.toggle("text--dark-purple");
 }
 
 function checkWin(currentPlayer) {
@@ -69,7 +93,8 @@ function checkWin(currentPlayer) {
 function checkDraw() {
   return gameCells.every((cell) => {
     return (
-      cell.classList.contains("circle") || cell.classList.contains("cross")
+      cell.classList.contains(players.circle.sign) ||
+      cell.classList.contains(players.cross.sign)
     );
   });
 }
@@ -81,10 +106,10 @@ function endGame(result) {
     case "draw":
       winMessage = "It's a draw!";
       break;
-    case "circle":
+    case players.circle.sign:
       winMessage = "O's win!";
       break;
-    case "cross":
+    case players.cross.sign:
       winMessage = "X's win!";
       break;
   }

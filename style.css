@@ -92,7 +92,6 @@ body {
 }
 .game-start__players > span {
   cursor: pointer;
-  border: 3px solid blue;
 }
 
 .game {
@@ -107,6 +106,14 @@ body {
   margin: auto;
 }
 
+.game-board.text--yellow {
+  color: var(--yellow);
+}
+
+.game-board.text--dark-purple {
+  color: var(--dark-purple);
+}
+
 .game-board__cell {
   width: 33%;
   aspect-ratio: 1/1;
@@ -114,6 +121,9 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 8rem;
+}
+
+.game-board__cell.text--yellow {
   color: var(--yellow);
 }
 
