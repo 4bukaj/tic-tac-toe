@@ -1,6 +1,7 @@
 const startGameBtn = Array.from(
   document.getElementsByClassName("startGame-btn")
 );
+const previousGamesBtn = document.getElementById("previousGames-btn");
 const startGameScreen = document.querySelector(".game-start");
 const gameScreen = document.querySelector(".game");
 const gameBoard = document.querySelector(".game-board");
@@ -8,6 +9,7 @@ const gameCells = Array.from(
   document.getElementsByClassName("game-board__cell")
 );
 const endGameScreen = document.querySelector(".game-end");
+const previousGamesScreen = document.querySelector(".previous-games");
 let circleMove = true;
 
 const players = {
@@ -32,7 +34,10 @@ const winningCombinations = [
   [2, 4, 6],
 ];
 
+const pastGamesCombinations = [];
+
 startGameBtn.forEach((button) => button.addEventListener("click", startGame));
+previousGamesBtn.addEventListener("click", showPreviousGames);
 
 function currentPlayer() {
   return circleMove ? players.circle.sign : players.cross.sign;
@@ -48,14 +53,18 @@ function previousColor() {
 
 function startGame() {
   endGameScreen.classList.add("hidden");
-  //resetting board
+  previousGamesScreen.classList.add("hidden");
+  gameScreen.classList.remove("blurred", "hidden");
+  startGameScreen.classList.toggle("hidden");
+
+  //resetting game cells from all color and player classes
   gameCells.forEach((cell) => {
     cell.className = "game-board__cell clickable";
     cell.addEventListener("click", handleClick, { once: true });
   });
+
+  //adding starting color and player classes
   gameBoard.classList.add(currentColor());
-  startGameScreen.classList.toggle("hidden");
-  gameScreen.classList.toggle("hidden");
   gameBoard.classList.add(currentPlayer());
 }
 
@@ -72,7 +81,7 @@ function handleClick(e) {
   } else if (checkDraw()) endGame("draw");
   switchPlayer();
 
-  //replacing class for players hovers
+  //replacing classes for players hovers
   currentPlayer() === players.circle.sign
     ? gameBoard.classList.replace(players.cross.sign, players.circle.sign)
     : gameBoard.classList.replace(players.circle.sign, players.cross.sign);
@@ -114,6 +123,32 @@ function endGame(result) {
       break;
   }
 
+  saveGameCombination();
   endGameScreen.querySelector(".game-end__text").innerHTML = winMessage;
   endGameScreen.classList.remove("hidden");
+  gameScreen.classList.add("blurred");
+}
+
+function saveGameCombination() {
+  const lastCombination = [];
+
+  gameCells.forEach((cell) => {
+    if (cell.classList.contains(players.circle.sign)) {
+      lastCombination.push(players.circle.sign);
+    } else if (cell.classList.contains(players.cross.sign)) {
+      lastCombination.push(players.cross.sign);
+    } else {
+      lastCombination.push("");
+    }
+  });
+
+  pastGamesCombinations.push(lastCombination);
+}
+
+function showPreviousGames() {
+  endGameScreen.classList.add("hidden");
+  gameScreen.classList.add("hidden");
+  previousGamesScreen.classList.remove("hidden");
+
+  console.log(pastGamesCombinations);
 }
