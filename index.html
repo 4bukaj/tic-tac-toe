@@ -17,9 +17,20 @@
   <body>
     <div class="container">
       <div class="game-start">
+        <h1>Pick a side</h1>
         <div class="game-start__players">
-          <span>X</span>
-          <span>O</span>
+          <input
+            type="radio"
+            name="player"
+            id="player-o"
+            value="circle"
+            checked
+          />
+          <label for="player-o"
+            >O</label>
+            <input type="radio" name="player" id="player-x" value="cross" />
+            <label for="player-x">X</label>
+          </label>
         </div>
         <div class="game-start__button">
           <button class="btn--yellow startGame-btn">Start</button>
@@ -46,14 +57,14 @@
             <div class="score-x">X: <span class="score"></span></div>
             <div class="score-draw">Draws: <span class="score"></span></div>
           </div>
-          <button class="btn--yellow startGame-btn">Play again</button>
+          <button class="btn--yellow resetGame-btn">Play again</button>
         </div>
       </div>
     </div>
     <div class="game-end hidden">
       <div class="game-end__text"></div>
       <div class="game-end__buttons">
-        <button class="btn--yellow startGame-btn">Play again</button>
+        <button class="btn--yellow resetGame-btn">Play again</button>
         <button class="btn--yellow" id="previousGames-btn">
           Previous games
         </button>

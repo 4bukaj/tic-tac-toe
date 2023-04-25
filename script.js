@@ -1,6 +1,5 @@
-const startGameBtn = Array.from(
-  document.getElementsByClassName("startGame-btn")
-);
+const startGameBtn = document.querySelector(".startGame-btn");
+const resetGameBtn = document.querySelectorAll(".resetGame-btn");
 const previousGamesBtn = document.getElementById("previousGames-btn");
 const startGameScreen = document.querySelector(".game-start");
 const gameScreen = document.querySelector(".game");
@@ -14,7 +13,7 @@ const previousGamesContainer = previousGamesScreen.querySelector(
   ".previous-games__container"
 );
 const gamesScore = document.querySelector(".previous-games__score");
-let circleMove = true;
+let circleMove;
 
 const players = {
   circle: {
@@ -45,8 +44,9 @@ const score = {
   draws: 0,
 };
 
-startGameBtn.forEach((button) => button.addEventListener("click", startGame));
+startGameBtn.addEventListener("click", startGame);
 previousGamesBtn.addEventListener("click", showPreviousGames);
+resetGameBtn.forEach((button) => button.addEventListener("click", resetGame));
 
 function currentPlayer() {
   return circleMove ? players.circle.sign : players.cross.sign;
@@ -61,10 +61,14 @@ function previousColor() {
 }
 
 function startGame() {
-  endGameScreen.classList.add("hidden");
-  previousGamesScreen.classList.add("hidden");
+  const selectedPlayer = document.querySelector(
+    'input[name="player"]:checked'
+  ).value;
+
+  circleMove = selectedPlayer === players.circle.sign ? true : false;
+
   gameScreen.classList.remove("blurred", "hidden");
-  startGameScreen.classList.toggle("hidden");
+  startGameScreen.classList.add("hidden");
 
   //resetting game cells from all color and player classes
   gameCells.forEach((cell) => {
@@ -72,9 +76,17 @@ function startGame() {
     cell.addEventListener("click", handleClick, { once: true });
   });
 
-  //adding starting color and player classes
+  //resetting and adding starting color and player classes
+  gameBoard.className = "game-board";
   gameBoard.classList.add(currentColor());
   gameBoard.classList.add(currentPlayer());
+}
+
+function resetGame() {
+  startGameScreen.classList.remove("hidden");
+  gameScreen.classList.add("hidden");
+  previousGamesScreen.classList.add("hidden");
+  endGameScreen.classList.add("hidden");
 }
 
 function handleClick(e) {

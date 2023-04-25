@@ -96,17 +96,43 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-size: 2rem;
+  gap: 30px;
+}
+
+.game-start h1 {
+  font-size: 3rem;
+  text-align: center;
+  color: var(--yellow);
 }
 
 .game-start__players {
   color: var(--yellow);
-  font-size: 14rem;
   text-align: center;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  height: 100%;
 }
-.game-start__players > span {
+
+.game-start__players label {
+  position: relative;
+  border-radius: 50px;
   cursor: pointer;
+  font-size: 8rem;
+  padding: 0 50px;
+  height: fit-content;
+}
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+input[type="radio"]:checked + label {
+  background-color: var(--yellow);
+  color: var(--red);
 }
 
 .game {
